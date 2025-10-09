@@ -1,6 +1,7 @@
 import React from "react";
 import { FaGithub } from "react-icons/fa";
 import logo from "../../assets/logo.png";
+import { Link, NavLink } from "react-router";
 
 const NavBar = () => {
   return (
@@ -30,37 +31,43 @@ const NavBar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a>Home</a>
+                <NavLink to="/">Home</NavLink>
               </li>
 
               <li>
-                <a>App</a>
+                <NavLink to="/applications">App</NavLink>
               </li>
 
               <li>
-                <a>Installation</a>
+                <NavLink to="/installed">Installation</NavLink>
               </li>
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">
+          <Link to="/" className="flex items-center text-xl cursor-pointer">
             <img className="w-[30px]" src={logo} alt="" />
             <span className="bg-gradient-to-r from-[#632EE3] to-[#9F62F2] inline-block text-transparent bg-clip-text">
               HERO.IO
             </span>
-          </a>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 ">
             <li>
-              <a className="hover:underline ">Home</a>
+              <NavLink to="/" className="hover:underline ">
+                Home
+              </NavLink>
             </li>
 
             <li>
-              <a className="hover:underline">App</a>
+              <NavLink to="/applications" className="hover:underline">
+                App
+              </NavLink>
             </li>
 
             <li>
-              <a className="hover:underline">Installation</a>
+              <NavLink to="/installed" className="hover:underline">
+                Installation
+              </NavLink>
             </li>
           </ul>
         </div>
@@ -68,7 +75,7 @@ const NavBar = () => {
           <a
             target="_blank"
             href="https://github.com/ziaullhaque"
-            className="btn bg-gradient-to-r from-[#632EE3] to-[#9F62F2]"
+            className="btn text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2]"
           >
             <FaGithub /> Contribute
           </a>

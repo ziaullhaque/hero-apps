@@ -2,6 +2,7 @@ import React from "react";
 import error from "../assets/error-404.png";
 import NavBar from "../Layouts/NavBar/NavBar";
 import Footer from "../Layouts/Footer/Footer";
+import { Link } from "react-router";
 
 const Error = () => {
   return (
@@ -14,7 +15,7 @@ const Error = () => {
           The page you are looking for is not available.
         </p>
         <button className="btn px-10 bg-gradient-to-r from-[#632EE3] to-[#9F62F2]">
-          Go Back!
+          <Link to="/">Go Back!</Link>
         </button>
       </div>
       <Footer></Footer>

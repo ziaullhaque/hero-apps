@@ -1,22 +1,34 @@
 import { createBrowserRouter } from "react-router";
 import MainLayout from "../Layouts/MainLayout.jsx/MainLayout";
 import Home from "../Pages/Home";
-import TrendingApps from "../Pages/TrendingApps";
 import Error from "../Error/Error";
+import AllApplications from "../Pages/AllApplications";
+import Installed from "../Pages/Installed";
+import AppDetails from "../Pages/AppDetails";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
+    hydrateFallbackElement: <p>Loading....</p>,
     errorElement: <Error></Error>,
     children: [
       {
         index: true,
         element: <Home></Home>,
+        loader: () => fetch("./appData.json"),
       },
       {
-        path: "/trendingApp",
-        element: <TrendingApps></TrendingApps>,
+        path: "/applications",
+        element: <AllApplications></AllApplications>,
+      },
+      {
+        path: "/installed",
+        element: <Installed></Installed>,
+      },
+      {
+        path: "/applications/:id",
+        element: <AppDetails></AppDetails>,
       },
     ],
   },
