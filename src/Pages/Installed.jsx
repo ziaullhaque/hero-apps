@@ -30,12 +30,25 @@ const Installed = () => {
     toast.success(`${title} Unistalled `);
   };
 
+  // const sortedItem = () => {
+  //   if (sortSize === "price-asc")
+  //     return [...installed].sort((a, b) => a.ratingAvg - b.ratingAvg);
+  //   else if (sortSize === "price-desc")
+  //     return [...installed].sort((a, b) => b.ratingAvg - a.ratingAvg);
+  //   else return installed;
+  // };
   const sortedItem = () => {
-    if (sortSize === "price-asc")
-      return [...installed].sort((a, b) => a.ratingAvg - b.ratingAvg);
-    else if (sortSize === "price-desc")
-      return [...installed].sort((a, b) => b.ratingAvg - a.ratingAvg);
-    else return installed;
+    if (sortSize === "price-desc") {
+      return [...installed].sort(
+        (a, b) => parseFloat(a.downloads) - parseFloat(b.downloads)
+      );
+    } else if (sortSize === "price-asc") {
+      return [...installed].sort(
+        (a, b) => parseFloat(b.downloads) - parseFloat(a.downloads)
+      );
+    } else {
+      return installed;
+    }
   };
 
   if (!installed.length)
@@ -80,7 +93,10 @@ const Installed = () => {
 
       <div className="space-y-3">
         {sortedItem().map((a) => (
-          <div key={a.id} className="card card-side bg-base-100 shadow border">
+          <div
+            key={a.id}
+            className="card card-side bg-base-100 shadow border p-3"
+          >
             <figure>
               <img
                 className="w-40 h-28 object-cover"
@@ -118,4 +134,3 @@ const Installed = () => {
 };
 
 export default Installed;
-

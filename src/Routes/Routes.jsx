@@ -5,13 +5,14 @@ import Error from "../Error/Error";
 import AllApplications from "../Pages/AllApplications";
 import Installed from "../Pages/Installed";
 import AppDetails from "../Pages/AppDetails";
+import { BlinkBlur } from "react-loading-indicators";
 // import NotFound from "../Error/NotFound";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    hydrateFallbackElement: <p>Loading....</p>,
+    hydrateFallbackElement: <p className="text-center mt-60"> <BlinkBlur color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} /> </p>,
     errorElement: <Error></Error>,
     children: [
       {

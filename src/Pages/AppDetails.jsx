@@ -19,19 +19,22 @@ import {
   Bar,
   Line,
 } from "recharts";
+import { BlinkBlur } from "react-loading-indicators";
 
 const AppDetails = () => {
   const { id } = useParams();
   const { applications, loading, error } = useApps();
   const [isInstalled, setIsInstalled] = useState(false);
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (loading) return <p className="text-center mt-60"> <BlinkBlur color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} /> </p>;
   if (error) return <NotFound />;
 
   const app = applications?.find((a) => String(a.id) === id);
   if (!app)
     return (
       <p className="text-center mt-10">
+
+        
         <NotFound />
       </p>
     );
@@ -72,7 +75,7 @@ const AppDetails = () => {
           <img
             src={image}
             alt={title}
-            className="w-[260px] h-[260px] object-cover rounded-xl border"
+            className="w-[160px] h-[160px] object-cover rounded-xl border"
           />
         </div>
 
@@ -151,4 +154,5 @@ const AppDetails = () => {
 };
 
 export default AppDetails;
+
 

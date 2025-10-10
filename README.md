@@ -20,4 +20,4 @@ A modern web app store built with React, Tailwind, and DaisyUI.
 - Toast Notifications
 
 ## 🔗 Live Demo
-👉 
+👉 https://hero-io-byzia.netlify.app/

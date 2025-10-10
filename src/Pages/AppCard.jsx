@@ -12,8 +12,12 @@ const AppCard = ({ app }) => {
         to={`/applications/${id}`}
         className="card bg-base-100  shadow-sm hover:scale-103 transition ease-in-out "
       >
-        <figure className="h-48 overflow-hidden">
-          <img className="w-full object-cover" src={image} alt="App" />
+        <figure className=" overflow-hidden">
+          <img
+            className="w-[160px] h-[160px] rounded-2xl"
+            src={image}
+            alt="App"
+          />
         </figure>
         <div className="card-body">
           <h2 className="card-title">{title}</h2>
