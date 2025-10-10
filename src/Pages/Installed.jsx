@@ -1,61 +1,69 @@
 import React, { useEffect, useState } from "react";
 import rating from "../assets/icon-ratings.png";
 import download from "../assets/icon-downloads.png";
+import toast, { Toaster } from "react-hot-toast";
+import { Link } from "react-router";
 
 const Installed = () => {
   const [sortSize, setSortSize] = useState("none");
   const [installed, setInstalled] = useState([]);
+
   useEffect(() => {
     const saveList = JSON.parse(localStorage.getItem("installed")) || [];
-    if (saveList) setInstalled(saveList);
+    setInstalled(saveList);
   }, []);
 
-  const sortedItem = () => {
-    if (sortSize === "price-asc") {
-      return [...installed].sort((a, b) => a.ratingAvg - b.ratingAvg);
-    } else if (sortSize === "price-desc") {
-      return [...installed].sort((a, b) => b.ratingAvg - a.ratingAvg);
-    } else {
-      return installed;
-    }
-  };
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const updated = JSON.parse(localStorage.getItem("installed")) || [];
+      setInstalled(updated);
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
-  const handleRemove = (id) => {
+  const handleRemove = (id, title) => {
     const existingList = JSON.parse(localStorage.getItem("installed")) || [];
-    let updatedList = existingList.filter((a) => a.id !== id);
-
+    const updatedList = existingList.filter((a) => a.id !== id);
     setInstalled(updatedList);
-    // setInstalled((prev) => prev.filter((a) => a.id !== id));
     localStorage.setItem("installed", JSON.stringify(updatedList));
+    toast.success(`${title} Unistalled `);
   };
 
-  // const sortedApps = React.useMemo(() => {
-  //   let sorted = [...installed];
+  const sortedItem = () => {
+    if (sortSize === "price-asc")
+      return [...installed].sort((a, b) => a.ratingAvg - b.ratingAvg);
+    else if (sortSize === "price-desc")
+      return [...installed].sort((a, b) => b.ratingAvg - a.ratingAvg);
+    else return installed;
+  };
 
-  //   if (sortSize === "price-asc") {
-  //     // sorted.sort((a, b) => Number(a.size) - Number(b.size));
-  //     sorted.sort((a, b) => parseFloat(a.size) - parseFloat(b.size));
-  //   } else if (sortSize === "price-desc") {
-  //     // sorted.sort((a, b) => Number(b.size) - Number(a.size));
-  //     sorted.sort((a, b) => parseFloat(b.size) - parseFloat(a.size));
-  //   }
-
-  //   return sorted;
-  // }, [sortSize, installed]);
+  if (!installed.length)
+    return (
+      <div className="col-span-full text-center my-45 space-y-10">
+        <h2 className="text-6xl font-semibold text-gray-500">
+          No Apps Install !
+        </h2>
+        <button
+          onClick={() => (window.location.href = "/applications")}
+          className="btn text-white px-10 bg-gradient-to-r from-[#632EE3] to-[#9F62F2]"
+        >
+          <Link to="/applications">Show All Apps</Link>
+        </button>
+      </div>
+    );
 
   return (
     <div className="my-20 mx-20">
+      <Toaster position="top-right" />
       <div className="my-10 text-center space-y-3">
         <h1 className="font-bold text-3xl">Your Installed Apps</h1>
         <p>Explore All Trending Apps on the Market developed by us</p>
       </div>
 
-      <div className="flex justify-between  items-center my-5">
+      <div className="flex justify-between items-center my-5">
         <h1 className="text-2xl font-semibold">
-          <span className="text-sm text-gray-500">
-            ({installed.length}) Apps Found.
-          </span>
-          Apps Found
+          <span>({installed.length}) Apps Found</span>
         </h1>
         <label className="form-control w-full max-w-xs">
           <select
@@ -63,7 +71,7 @@ const Installed = () => {
             value={sortSize}
             onChange={(e) => setSortSize(e.target.value)}
           >
-            <option value="none">Sort By Size</option>
+            <option value="none">Sort By Rating</option>
             <option value="price-asc">Low-&gt;High</option>
             <option value="price-desc">High-&gt;Low</option>
           </select>
@@ -71,7 +79,6 @@ const Installed = () => {
       </div>
 
       <div className="space-y-3">
-        {/* {installed.map((a) => ( */}
         {sortedItem().map((a) => (
           <div key={a.id} className="card card-side bg-base-100 shadow border">
             <figure>
@@ -83,26 +90,24 @@ const Installed = () => {
             </figure>
             <div className="card-body">
               <h3 className="card-title">{a.title}</h3>
-              <p className="text-base-content/70 flex  items-center space-x-3">
-                <div className="space-y-1 flex items-center space-x-1">
+              <p className="text-base-content/70 flex items-center space-x-3">
+                <div className="flex items-center space-x-1">
                   <img className="w-[15px]" src={download} alt="" />
-                  <h1 className="text-[#2CAA71]">{a.downloads}</h1>
+                  <span className="text-[#2CAA71]">{a.downloads}</span>
                 </div>
-                <div className="space-y-1 flex items-center space-x-1">
+                <div className="flex items-center space-x-1">
                   <img className="w-[15px]" src={rating} alt="" />
-                  <h1 className="text-[#FF8811]">{a.ratingAvg}</h1>
+                  <span className="text-[#FF8811]">{a.ratingAvg}</span>
                 </div>
-                <div className="space-y-1">
-                  <h1 className="">{a.size}</h1>
-                </div>
+                <span>{a.size}</span>
               </p>
             </div>
             <div className="pr-4 flex items-center gap-3">
               <button
-                onClick={() => handleRemove(a.id)}
+                onClick={() => handleRemove(a.id, a.title)}
                 className="btn btn-outline"
               >
-                Uninstalled
+                Uninstall
               </button>
             </div>
           </div>
@@ -113,3 +118,4 @@ const Installed = () => {
 };
 
 export default Installed;
+

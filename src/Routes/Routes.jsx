@@ -5,6 +5,7 @@ import Error from "../Error/Error";
 import AllApplications from "../Pages/AllApplications";
 import Installed from "../Pages/Installed";
 import AppDetails from "../Pages/AppDetails";
+// import NotFound from "../Error/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/applications",
+        // errorElement: <NotFound></NotFound>,
         element: <AllApplications></AllApplications>,
       },
       {

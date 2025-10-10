@@ -5,10 +5,14 @@ import appStore from "../assets/appStore.png";
 import { Link } from "react-router";
 import AppCard from "./AppCard";
 import useApps from "../Hooks/useApps";
+import { IoMdTrendingUp } from "react-icons/io";
+import { IoDownload } from "react-icons/io5";
+import { FaStar } from "react-icons/fa";
+import { BiLogoPlayStore } from "react-icons/bi";
 
 const Home = () => {
   // const applications = useLoaderData();
-  const { applications ,loading , error } = useApps();
+  const { applications} = useApps();
   // console.log(data)
   const featuredApp = applications.slice(0, 8);
   console.log(applications);
@@ -32,13 +36,13 @@ const Home = () => {
             href="https://play.google.com/store/games?device=windows"
             target="-blank"
           >
-            <button className="btn p-6">
+            <button className="btn p-6 bg-white hover:shadow-2xl">
               <img src={playStore} alt="" />
               Google Play
             </button>
           </a>
           <a href="https://www.apple.com/app-store/" target="-blank">
-            <button className="btn p-6">
+            <button className="btn p-6 bg-white hover:shadow-2xl">
               <img src={appStore} alt="" />
               App Store
             </button>
@@ -47,29 +51,41 @@ const Home = () => {
         <img className="mx-auto" src={banner} alt="" />
       </div>
       <div className="bg-gradient-to-r from-[#632EE3] to-[#9F62F2] space-y-10 text-center p-5 text-white">
-        <h1 className="font-bold text-xl">
+        <h1 className="font-bold text-4xl">
           Trusted by Millions, Built for You
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 px-10">
+        <div className="md:flex justify-center gap-20 ">
           <div>
             <p>Total Downloads</p>
-            <h1 className="font-extrabold text-7xl">29.6M</h1>
+            <h1 className="font-extrabold text-5xl flex justify-center items-center  gap-5">
+              29.6M <IoDownload />
+            </h1>
             <p className="pt-5">21% more than last month</p>
           </div>
           <div>
             <p>Total Reviews</p>
-            <h1 className="font-extrabold text-7xl">906K</h1>
+            <h1 className="font-extrabold text-5xl flex justify-center items-center  gap-5">
+              906K <FaStar />
+            </h1>
             <p className="pt-5">46% more than last month</p>
           </div>
           <div>
             <p>Active Apps</p>
-            <h1 className="font-extrabold text-7xl">132+</h1>
+            <h1 className="font-extrabold text-5xl flex justify-center items-center  gap-5">
+              132+ <BiLogoPlayStore />
+            </h1>
             <p className="pt-5">31 more will Launch</p>
           </div>
         </div>
       </div>
       <div className="my-20 text-center space-y-3">
-        <h1 className="font-bold text-3xl">Trending Apps</h1>
+        <h1 className="font-bold text-3xl flex justify-center items-center gap-3">
+          Trending Apps
+          <span>
+            <IoMdTrendingUp />
+          </span>
+        </h1>
+
         <p className="">
           Explore All Trending Apps on the Market developed by us
         </p>
