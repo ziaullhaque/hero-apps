@@ -14,7 +14,7 @@ const Error = () => {
         <p className="font-semibold">
           The page you are looking for is not available.
         </p>
-        <button className="btn px-10 bg-gradient-to-r from-[#632EE3] to-[#9F62F2]">
+        <button className="btn text-white px-10 bg-gradient-to-r from-[#632EE3] to-[#9F62F2]">
           <Link to="/">Go Back!</Link>
         </button>
       </div>

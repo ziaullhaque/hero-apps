@@ -11,9 +11,7 @@ import { FaStar } from "react-icons/fa";
 import { BiLogoPlayStore } from "react-icons/bi";
 
 const Home = () => {
-  // const applications = useLoaderData();
-  const { applications} = useApps();
-  // console.log(data)
+  const { applications } = useApps();
   const featuredApp = applications.slice(0, 8);
   console.log(applications);
   return (
@@ -90,7 +88,7 @@ const Home = () => {
           Explore All Trending Apps on the Market developed by us
         </p>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 my-15 mx-30">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 my-15 md:mx-30 mx-3">
         {/* <h3>App : {applications.length}</h3> */}
 
         {featuredApp.map((app) => (

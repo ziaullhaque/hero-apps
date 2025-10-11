@@ -21,7 +21,7 @@ const AllApplications = () => {
           Explore All Apps on the Market developed by us. We code for Millions
         </p>
       </div>
-      <div className="flex justify-between mx-10 items-center">
+      <div className="md:flex justify-between mx-10 text-center space-y-5 items-center">
         <h1 className="text-2xl font-semibold">
           <span className="">
             {/* text-sm text-gray-500 */}({searchApps.length}) Apps Found
@@ -38,7 +38,7 @@ const AllApplications = () => {
           {/* <button className="btn btn-outline">Search</button> */}
         </label>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 my-15 mx-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 my-15 md:mx-10 mx-3">
         {/* <h3>App : {applications.length}</h3> */}
 
         {searchApps.length > 0 ? (

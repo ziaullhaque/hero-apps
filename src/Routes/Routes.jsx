@@ -12,7 +12,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    hydrateFallbackElement: <p className="text-center mt-60"> <BlinkBlur color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} /> </p>,
+    hydrateFallbackElement:  <p className="text-center mt-60"> <BlinkBlur color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} /> </p>,
     errorElement: <Error></Error>,
     children: [
       {
@@ -22,12 +22,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/applications",
-        // errorElement: <NotFound></NotFound>,
         element: <AllApplications></AllApplications>,
       },
       {
         path: "/installed",
-        element: <Installed></Installed>,
+        Component: Installed,
       },
       {
         path: "/applications/:id",

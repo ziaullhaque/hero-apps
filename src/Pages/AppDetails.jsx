@@ -1,158 +1,181 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import useApps from "../Hooks/useApps";
-import rating from "../assets/icon-ratings.png";
-import download from "../assets/icon-downloads.png";
-import review from "../assets/icon-review.png";
-import NotFound from "../Error/NotFound";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { loadInstall, updatedApps } from "../Utilitis/localStorege";
+import { TbDownload } from "react-icons/tb";
+import { FaStar } from "react-icons/fa";
+import { MdReviews } from "react-icons/md";
+import { useEffect, useState } from "react";
+import reviwesimage from "../assets/icon-review.png";
+import appError from "../assets/App-Error.png";
+// import { toast } from 'react-toastify';
 import {
-  ComposedChart,
-  ResponsiveContainer,
-  CartesianGrid,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
-  Area,
-  Bar,
-  Line,
+  ResponsiveContainer,
 } from "recharts";
-import { BlinkBlur } from "react-loading-indicators";
+import Swal from "sweetalert2";
 
 const AppDetails = () => {
   const { id } = useParams();
   const { applications, loading, error } = useApps();
   const [isInstalled, setIsInstalled] = useState(false);
+  const app = applications.find((a) => String(a.id) === id);
 
-  if (loading) return <p className="text-center mt-60"> <BlinkBlur color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} /> </p>;
-  if (error) return <NotFound />;
-
-  const app = applications?.find((a) => String(a.id) === id);
-  if (!app)
-    return (
-      <p className="text-center mt-10">
-
-        
-        <NotFound />
-      </p>
+  useEffect(() => {
+    const installedApp = loadInstall();
+    console.log(installedApp);
+    const alreadyInstalled = installedApp.find(
+      (a) => String(a.id) === String(id)
     );
+    setIsInstalled(alreadyInstalled);
+  }, [id]);
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="w-12 h-12 border-4 border-dashed rounded-full animate-spin border-[#9F62F2]"></div>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="text-center my-20 text-red-600">
+        <h2 className="text-2xl font-bold">Failed to load apps</h2>
+        <p>{error?.message || "Something went wrong"}</p>
+      </div>
+    );
+
+  if (!app) {
+    return (
+      <div className="min-h-[60vh] space-y-8 flex flex-col items-center justify-center my-30">
+        <img src={appError} />
+        <h1 className="font-bold text-3xl">OPPS!! APP NOT FOUND</h1>
+        <p className="text-gray-500 font-semibold text-center max-w-lg">
+          The app you’re looking for doesn’t exist or has been removed.
+        </p>
+        <div className="">
+          <button className="btn text-white px-10 bg-gradient-to-r from-[#632EE3] to-[#9F62F2]">
+            <Link to="/applications">Go Back!</Link>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const {
     title,
     image,
     companyName,
-    size,
+    description,
     ratingAvg,
     downloads,
     reviews,
-    description,
-  } = app;
+    size,
+    ratings,
+  } = app || {};
 
-  // useEffect(() => {
-  //   const installedList = JSON.parse(localStorage.getItem("installed")) || [];
-  //   const isAppInstalled = installedList.some((a) => a.id === app.id);
-  //   setIsInstalled(isAppInstalled);
-  // }, [app?.id]);
-
-  const handleInstallToggle = () => {
-    const existingList = JSON.parse(localStorage.getItem("installed")) || [];
-
-    if (isInstalled) return;
-
-    const updatedList = [...existingList, app];
-    localStorage.setItem("installed", JSON.stringify(updatedList));
+  const handleInstalled = () => {
+    updatedApps(app);
     setIsInstalled(true);
-    toast.success(`${title} installed successfully! ✅`);
+    Swal.fire({
+      title: "Thank You",
+      text: "Your app installed successfully",
+      icon: "success",
+    });
   };
 
   return (
-    <div className="px-6 md:px-20 space-y-10 my-10">
-      <ToastContainer position="top-right" autoClose={2000} />
-      <div className="flex flex-col md:flex-row gap-10">
+    <div className="w-10/12 mx-auto">
+      <div className="xl:lg:md:flex  gap-10 my-20 border-b  border-gray-500 lg:xl:md:w-full pb-10">
         <div>
-          <img
-            src={image}
-            alt={title}
-            className="w-[160px] h-[160px] object-cover rounded-xl border"
-          />
+          <figure>
+            <img
+              className=" shadow-xl xl:lg:w-full md:w-70 w-50  mb-3 rounded-xl"
+              src={image}
+              alt=""
+            />
+          </figure>
         </div>
-
-        <div className="space-y-5">
-          <h1 className="font-bold text-3xl">{title}</h1>
-          <p className="text-gray-500 font-semibold">
-            Developed by: <span className="text-[#7941E8]">{companyName}</span>
-          </p>
-          <div className="border border-gray-300"></div>
-
-          <div className="flex flex-wrap items-center gap-10">
-            <div className="space-y-1 text-center">
-              <img className="w-[30px] mx-auto" src={download} alt="" />
-              <p className="text-gray-500">Downloads</p>
-              <h1 className="font-bold text-2xl">
-                {downloads.toLocaleString()}
-              </h1>
-            </div>
-            <div className="space-y-1 text-center">
-              <img className="w-[30px] mx-auto" src={rating} alt="" />
-              <p className="text-gray-500">Average Ratings</p>
-              <h1 className="font-bold text-2xl">{ratingAvg}</h1>
-            </div>
-            <div className="space-y-1 text-center">
-              <img className="w-[30px] mx-auto" src={review} alt="" />
-              <p className="text-gray-500">Total Reviews</p>
-              <h1 className="font-bold text-2xl">{reviews}</h1>
-            </div>
+        <div className="">
+          <div className="border-b pb-5  border-gray-500 lg:xl:md:w-7xl">
+            <h1 className="md:text-4xl xl:lg:text-5xl text-lg font-bold mb-3">
+              Name : {title}
+            </h1>
+            <p className="md:text-2xl xl:lg:text-4xl text-lg font-bold">
+              Developed by :{" "}
+              <span className="text-[#9F62F2]">{companyName}</span>
+            </p>
           </div>
+          <div>
+            <div className="lg:xl:md:flex  gap-10 py-7 ">
+              <span className="md:text-2xl  xl:lg:text-2xl  text-xl font-bold ">
+                <span className="text-green-500 lg:xl:text-5xl md:text-4xl  font-bold">
+                  <TbDownload />
+                </span>
+                <p className="text-gray-500 ">Downloads</p>
+                {downloads}
+              </span>
 
-          <button
-            onClick={handleInstallToggle}
-            className={`btn ${
-              isInstalled
-                ? "bg-[#1aeeab] text-black cursor-not-allowed"
-                : "bg-[#00D390] text-white hover:bg-[#00b67c]"
-            }`}
-            disabled={isInstalled}
-          >
-            {isInstalled ? "Installed" : `Install Now (${size})`}
-          </button>
+              <span className="md:text-2xl xl:lg:text-2xl  text-xl font-bold">
+                <span className="text-[#FF8811] lg:xl:text-5xl md:text-4xl font-bold ">
+                  <FaStar />
+                </span>
+                <p className="text-gray-500">Average Rating</p>
+                {ratingAvg}
+              </span>
+
+              <span className="md:text-2xl xl:lg:text-2xl  text-xl font-bold ">
+                <span>
+                  {" "}
+                  <img src={reviwesimage} alt="" />
+                </span>
+                <p className="text-gray-500">Total Reviews</p>
+                {reviews}
+              </span>
+            </div>
+            <button
+              onClick={handleInstalled}
+              className={`hover:cursor-pointer mb-6 text-xl font-bold p-4 rounded-lg transition-colors duration-300 ${
+                isInstalled
+                  ? "bg-gray-400 text-white"
+                  : "bg-[#00D390] text-white hover:bg-[#00b97f]"
+              }`}
+              disabled={isInstalled}
+            >
+              {isInstalled ? "Installed" : `Installed Now (${size})`}
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="border border-gray-300"></div>
-
-      {/* Chart Section */}
-      <div className="bg-base-100 border border-gray-200 rounded-xl p-4 h-80">
-        <h2 className="font-bold ml-8 mb-2">Rating Distribution</h2>
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart
-            layout="vertical"
-            data={[...app.ratings].reverse()}
-            margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-          >
-            <CartesianGrid stroke="#f5f5f5" />
+      {/* {chart} */}
+      <div className="my-10">
+        <h2 className="text-lg font-bold mb-4">Ratings</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart layout="vertical" data={ratings}>
             <XAxis type="number" />
-            <YAxis dataKey="name" type="category" scale="band" />
+            <YAxis dataKey="name" type="category" />
             <Tooltip />
-            <Legend />
-            <Area dataKey="amt" fill="#8884d8" stroke="#8884d8" />
-            <Bar dataKey="count" barSize={20} fill="#FF8811" />
-            <Line dataKey="uv" stroke="#ff7300" />
-          </ComposedChart>
+            <Bar
+              dataKey="count"
+              fill="#FF8811"
+              barSize={20}
+              radius={[5, 5, 5, 5]}
+            />
+          </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="border border-gray-300"></div>
-
-      <div className="pb-10">
-        <h1 className="text-xl font-semibold mb-2">Description</h1>
-        <p className="text-gray-700 leading-relaxed">{description}</p>
+      {/* {description} */}
+      <div className="my-20">
+        <p className="text-3xl font-bold mb-3">Description</p>
+        <p className="text-lg text-gray-500">{description}</p>
       </div>
     </div>
   );
 };
 
 export default AppDetails;
-
-
