@@ -42,7 +42,7 @@ This project is built following modern web development standards and deployed on
 - react-router-dom
 - recharts
 - sweetalert2
-- tailwindcss / daisyui (optional)
+- tailwindcss / daisyui 
 
 ## Installation & Running Locally
 
